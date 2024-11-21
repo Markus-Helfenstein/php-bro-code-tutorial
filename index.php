@@ -8,17 +8,17 @@
 </head>
 
 <body>
-    <form action="index.php" method="post">
-        <label for="username">username:</label><br>
-        <input type="text" name="username"><br>
-        <label for="password">password:</label><br>
-        <input type="password" name="password"><br>
-        <input type="submit" value="log in">
-    </form>
+    
 </body>
 
 </html>
 <?php
-    echo "{$_POST["username"]} <br>";
-    echo "{$_POST["password"]} <br>";
+    $foods = ["apple", "orange", "banana", "coconut"];
+
+    array_push($foods, "pineapple", "kiwi");
+    $foods = array_reverse($foods);
+
+    foreach($foods as $food){
+        echo "{$food}<br>";
+    }
 ?>
