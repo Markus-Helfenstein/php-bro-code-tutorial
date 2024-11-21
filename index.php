@@ -1,3 +1,6 @@
+<?php
+session_start()
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -21,12 +24,14 @@
         <label for="password">password: </label><br>
         <input type="password" name="password"><br>
         <input type="submit" name="login" value="log in"><br>
+        <input type="submit" name="logout" value="log out"><br>
     </form>
 </body>
 
 </html>
 <?php
-function filter_sanitize_post($key) {
+function filter_sanitize_post($key)
+{
     return filter_input(INPUT_POST, $key, FILTER_SANITIZE_SPECIAL_CHARS);
 }
 
@@ -35,10 +40,10 @@ foreach ($_POST as $key => $value) {
     if (is_array($value)) {
         $concatenatedArrayString = implode(",", $value);
         echo "{$key} => [{$concatenatedArrayString}] <br>";
-    } elseif(0 == strcmp($key, "email")) {
+    } elseif (0 == strcmp($key, "email")) {
         // does not to_lower/to_upper
         $email = filter_input(INPUT_POST, "email", FILTER_VALIDATE_EMAIL);
-        if(empty($email)) {
+        if (empty($email)) {
             echo "Entered value is not a valid email address!<br>";
         } else {
             echo "{$key} => <a href='mailto:{$email}'>{$email}</a> <br>";
@@ -47,4 +52,22 @@ foreach ($_POST as $key => $value) {
         echo "{$key} => {$value} <br>";
     }
 }
+
+if (isset($_POST["login"]) && !empty($_POST["username"]) && !empty($_POST["password"])) {
+    $_SESSION["username"] = filter_sanitize_post("username");
+    $_SESSION["password"] = filter_sanitize_post("password");
+}
+
+if (isset($_POST["logout"])) {
+    session_destroy();
+    header("location: index.php");
+} else {
+    if (isset($_SESSION["username"])) {
+        echo "{$_SESSION['username']}<br>";
+    }
+    if (isset($_SESSION["password"])) {
+        echo "{$_SESSION['password']}<br>";
+    }    
+}
+
 ?>
