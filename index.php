@@ -53,21 +53,24 @@ foreach ($_POST as $key => $value) {
     }
 }
 
-if (isset($_POST["login"]) && !empty($_POST["username"]) && !empty($_POST["password"])) {
-    $_SESSION["username"] = filter_sanitize_post("username");
-    $_SESSION["password"] = filter_sanitize_post("password");
+if ("POST" == $_SERVER["REQUEST_METHOD"] && !empty($_POST["username"]) && !empty($_POST["password"])) {
+    $_SESSION["username"] = filter_sanitize_post("username");    
+    $_SESSION["password_hash"] = password_hash(filter_sanitize_post("password"), PASSWORD_DEFAULT);
 }
 
 if (isset($_POST["logout"])) {
-    session_destroy();
-    header("location: index.php");
+    session_destroy();    
 } else {
     if (isset($_SESSION["username"])) {
         echo "{$_SESSION['username']}<br>";
     }
-    if (isset($_SESSION["password"])) {
-        echo "{$_SESSION['password']}<br>";
+    if (isset($_SESSION["password_hash"])) {
+        echo "{$_SESSION['password_hash']}<br>";
     }    
+}
+
+if ("POST" == $_SERVER["REQUEST_METHOD"]) {
+    header("Location: {$_SERVER['PHP_SELF']}");
 }
 
 ?>
